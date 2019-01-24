@@ -1,0 +1,21 @@
+<div n:if="$canceled" class="alert alert-success">
+    Rezervace byla úspěšně zrušena.
+</div>
+
+<div n:if="$booking">
+    <p class="h3 text-center">
+        Opravdu chcete zrušit rezervaci?
+    </p>
+    <p class="text-center">
+        <a href="{link Confirm! $booking->hash, true}" class="btn btn-primary">
+            Ano
+        </a>
+        <a href="{link Confirm! $booking->hash, false}" class="btn btn-outline-primary ml-2">
+            Ne
+        </a>
+    </p>
+</div>
+
+<div n:if="!$booking">
+
+</div>

@@ -1,0 +1,23 @@
+$color-open:              #a3ffa3
+$color-not-available:     #feaeae
+$color-link:              #000
+
+.room
+    .days
+        .day
+            .open
+                background: $color-open
+
+                a
+                    color: $color-link
+                    transition: all .2s ease-in-out
+
+                    &:hover, &:focus, &:active
+                        text-decoration: none
+                        background: darken($color-open, 10%)
+
+                &.not-available
+                    background: $color-not-available
+
+                &.past
+                    background: none

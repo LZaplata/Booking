@@ -1,0 +1,16 @@
+{
+    "name": "lzaplata/booking",
+    "description": "Simple booking for Nette",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zap",
+            "email": "zap@hucr.cz"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "nette/nette": "^2.4",
+        "nette/utils": "^2.4"
+    }
+}

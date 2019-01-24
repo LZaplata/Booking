@@ -1,0 +1,12 @@
+.room .days .day .open {
+  background: #a3ffa3; }
+  .room .days .day .open a {
+    color: #000;
+    transition: all .2s ease-in-out; }
+    .room .days .day .open a:hover, .room .days .day .open a:focus, .room .days .day .open a:active {
+      text-decoration: none;
+      background: #70ff70; }
+  .room .days .day .open.not-available {
+    background: #feaeae; }
+  .room .days .day .open.past {
+    background: none; }

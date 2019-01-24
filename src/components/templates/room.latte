@@ -1,0 +1,92 @@
+<div class="room">
+    <div class="booking-form mb-5" n:if="$isBookingFormVisible">
+        {control bookingForm}
+    </div>
+
+    <div class="weeks d-flex justify-content-between mb-4">
+        <a href="{link this year => $prevWeekDateTime->format("Y"), week => $prevWeekDateTime->format("W")}" class="btn btn-outline-primary prev">
+            << předchozí
+        </a>
+
+        <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                {(int)$week}. týden ({$weekPeriod->getStartDate()->format("j. n. Y")} - {$weekPeriod->getEndDate()->format("j. n. Y")})
+            </button>
+            <div class="dropdown-menu">
+                <a n:class="dropdown-item, $week == $period->format('W') ? font-weight-bold" href="{link this year => $period->format('Y'), week => $period->format('W')}" n:foreach="$weeksPeriod as $period">
+                    {$period->format('W') == date("W") ? "tento" : (int)$period->format("W") . "."} týden ({$period->format("j. n. Y")} - {$period->modify("+6 days")->format("j. n. Y")})
+                </a>
+            </div>
+        </div>
+
+        <a href="{link this year => $nextWeekDateTime->format("Y"), week => $nextWeekDateTime->format("W")}" class="btn btn-outline-primary next">
+            následující >>
+        </a>
+    </div>
+
+    <div class="days d-flex border border-right-0 border-dark">
+        <div class="day flex-grow-1 border-right border-dark">
+            <div class="header">
+                <div class="time font-weight-bold">
+                    <span class="d-flex justify-content-center w-100 px-2 py-1">
+                        Čas (od)
+                    </span>
+                </div>
+            </div>
+
+            <div n:foreach="$dateTimePeriod as $period" class="border-top border-dark">
+                <div class="time font-weight-bold d-flex justify-content-center">
+                    <span class="d-flex justify-content-center w-100 px-2 py-1">
+                        {include time dateTime => $period}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div n:foreach="$days as $dayOfWeek => $day" class="day d-flex flex-column flex-grow-1 border-right border-dark">
+            {var $isFirstDay = $iterator->first ? true : false}
+
+            <div class="header">
+                <div class="date font-weight-bold">
+                    <span class="d-flex justify-content-center w-100 px-2 py-1">
+                        {include date dateTime => $dateTimePeriod->getStartDate()->setISODate($year, $week, $dayOfWeek)}
+                    </span>
+                </div>
+            </div>
+
+            <div n:foreach="$dateTimePeriod as $period" class="border-top border-dark flex-grow-1 flex-shrink-1" style="flex-basis: 0%;">
+                {var $bookingsCount = $control->getPeriodBookings($dayOfWeek, $period->format("H"), $period->format("i"))}
+                {var $isOpen = $day->getStartDateTime() <= $period && $period < $day->getEndDateTime()}
+                {var $isDisabled = $day->getDisabledPeriod()->getStartDate() <= $period && $period < $day->getDisabledPeriod()->getEndDate()}
+                {var $isAvailable = $bookingsCount >= $capacity ? false : true}
+                {php $period->setISODate($year, $week, $dayOfWeek)}
+                {var $isOldDateTime = $actualDateTime > $period}
+                {var $isDisabledDateTime = false}
+
+                {foreach $disabledPeriods as $disabledPeriod}
+                    {if !$isDisabledDateTime}
+                        {var $isDisabledDateTime = $disabledPeriod->getStartDate() <= $period && $period <= $disabledPeriod->getEndDate()}
+                    {/if}
+                {/foreach}
+
+                <div n:class="$isOpen && !$isDisabled && !$isDisabledDateTime ? open : closed, $isOldDateTime ? past, !$isAvailable ? not-available, w-100, h-100, $isOldDateTime || !$isAvailable ? 'd-flex justify-content-center align-items-center'">
+                    <a href="{link ShowBookingForm! dateTime => $period->getTimestamp()}" n:if="$isOpen && !$isDisabled && !$isDisabledDateTime" n:tag-if="!$isOldDateTime && $isAvailable" class="ajax d-flex justify-content-center px-2 py-1">
+                        {include period capacity => $capacity, bookingsCount => $bookingsCount}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{define date}
+    {$dateTime->format("j. n. Y")}
+{/define}
+
+{define time}
+    {$dateTime->format("H:i")}
+{/define}
+
+{define period}
+    {$bookingsCount}/{$capacity}
+{/define}
