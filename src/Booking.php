@@ -12,12 +12,11 @@ use LZaplata\Booking\Loader\NetteDbLoader;
 use LZaplata\Booking\Loaders\IDatabaseLoader;
 use Nette\Application\UI\Form;
 use Nette\Mail\IMailer;
+use Nette\Object;
 use Nette\SmartObject;
 
-class Booking
+class Booking extends Object
 {
-    use SmartObject;
-
     /** @var IRoomControlFactory */
     private $roomControlFactory;
 

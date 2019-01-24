@@ -10,12 +10,11 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
+use Nette\Object;
 use Nette\SmartObject;
 
-class Mail
+class Mail extends Object
 {
-    use SmartObject;
-
     /** @var IMailer */
     private $mailer;
 
