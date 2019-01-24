@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "nette/nette": "^2.4",
-        "nette/utils": "^2.4"
+        "nette/nette": "^2.3.10",
+        "nette/utils": "^2.3.10"
     }
 }
