@@ -266,6 +266,7 @@ class RoomControl extends Control
 
     /**
      * @param \DatePeriod $period
+     * @throws \Exception
      * @return void
      */
     public function addDisabledPeriod(\DatePeriod $period)

@@ -20,8 +20,8 @@ class Day extends Object
     /** @var DateTime */
     private $endDateTime;
 
-    /** @var \DatePeriod */
-    private $disabledPeriod;
+    /** @var array */
+    private $disabledPeriods = [];
 
     /** @var int */
     const MONDAY = 1,
@@ -88,28 +88,30 @@ class Day extends Object
 
     /**
      * @param \DatePeriod $period
+     * @throws \Exception
      * @return void
      */
-    public function setDisabledPeriod(\DatePeriod $period)
+    public function addDisabledPeriod(\DatePeriod $period)
     {
-        $this->disabledPeriod = $period;
+        if (!$period instanceof \DatePeriod) {
+            $period = new \DatePeriod($this->startDateTime, new \DateInterval("PT0M"), $this->startDateTime);
+        } else {
+            if (!$period->getEndDate() instanceof DateTime) {
+                $endDate = $period->getStartDate()->add($period->getDateInterval());
+
+                $period = new \DatePeriod($period->getStartDate(), $period->getDateInterval(), $endDate);
+            }
+        }
+
+        $this->disabledPeriods[] = $period;
     }
 
     /**
-     * @return \DatePeriod
-     * @throws \Exception
+     * @return array
      */
-    public function getDisabledPeriod()
+    public function getDisabledPeriods()
     {
-        if (!$this->disabledPeriod instanceof \DatePeriod) {
-            return new \DatePeriod($this->startDateTime, new \DateInterval("PT0M"), $this->startDateTime);
-        } else {
-            if (!$this->disabledPeriod->getEndDate() instanceof DateTime) {
-                $endDate = $this->disabledPeriod->getStartDate()->add($this->disabledPeriod->getDateInterval());
-
-                return new \DatePeriod($this->disabledPeriod->getStartDate(), $this->disabledPeriod->getDateInterval(), $endDate);
-            } return $this->disabledPeriod;
-        }
+        return $this->disabledPeriods;
     }
 
     /**

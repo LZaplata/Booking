@@ -57,11 +57,17 @@
             <div n:foreach="$dateTimePeriod as $period" class="border-top border-dark flex-grow-1 flex-shrink-1" style="flex-basis: 0%;">
                 {var $bookingsCount = $control->getPeriodBookings($dayOfWeek, $period->format("H"), $period->format("i"))}
                 {var $isOpen = $day->getStartDateTime() <= $period && $period < $day->getEndDateTime()}
-                {var $isDisabled = $day->getDisabledPeriod()->getStartDate() <= $period && $period < $day->getDisabledPeriod()->getEndDate()}
                 {var $isAvailable = $bookingsCount >= $capacity ? false : true}
                 {php $period->setISODate($year, $week, $dayOfWeek)}
                 {var $isOldDateTime = $actualDateTime > $period}
                 {var $isDisabledDateTime = false}
+                {var $isDisabled = false}
+
+                {foreach $day->getDisabledPeriods() as $disabledPeriod}
+                    {if !$isDisabled}
+                        {var $isDisabled = $disabledPeriod->getStartDate()->setISODate($year, $week, $dayOfWeek) <= $period && $period < $disabledPeriod->getEndDate()->setISODate($year, $week, $dayOfWeek)}
+                    {/if}
+                {/foreach}
 
                 {foreach $disabledPeriods as $disabledPeriod}
                     {if !$isDisabledDateTime}
