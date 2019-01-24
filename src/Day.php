@@ -93,7 +93,7 @@ class Day extends Object
      */
     public function addDisabledPeriod(\DatePeriod $period)
     {
-        if (!$period instanceof \DatePeriod) {
+        if (!$period instanceof DatePeriod) {
             $period = new \DatePeriod($this->startDateTime, new \DateInterval("PT0M"), $this->startDateTime);
         } else {
             if (!$period->getEndDate() instanceof DateTime) {
