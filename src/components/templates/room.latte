@@ -76,7 +76,7 @@
                 {/foreach}
 
                 <div n:class="$isOpen && !$isDisabled && !$isDisabledDateTime ? open : closed, $isOldDateTime ? past, !$isAvailable ? not-available, w-100, h-100, $isOldDateTime || !$isAvailable ? 'd-flex justify-content-center align-items-center'">
-                    <a href="{link ShowBookingForm! dateTime => $period->getTimestamp()}" n:if="$isOpen && !$isDisabled && !$isDisabledDateTime" n:tag-if="!$isOldDateTime && $isAvailable" class="ajax d-flex justify-content-center px-2 py-1">
+                    <a href="{link ShowBookingForm! dateTime => $period->getTimestamp()}" n:if="$isOpen && !$isDisabled && !$isDisabledDateTime" n:tag-if="!$isOldDateTime && $isAvailable" class="d-flex justify-content-center px-2 py-1">
                         {include period capacity => $capacity, bookingsCount => $bookingsCount}
                     </a>
                 </div>
