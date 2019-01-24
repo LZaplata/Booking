@@ -4,14 +4,13 @@ namespace LZaplata\Booking;
 
 
 use Nette\InvalidArgumentException;
+use Nette\Object;
 use Nette\SmartObject;
 use Nette\Utils\DateTime;
 use Nette\Utils\Validators;
 
-class Day
+class Day extends Object
 {
-    use SmartObject;
-
     /** @var int */
     private $dayOfWeek;
 
