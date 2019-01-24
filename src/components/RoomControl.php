@@ -14,6 +14,7 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Bridges\ApplicationLatte\TemplateFactory;
+use Nette\Database\Table\ActiveRow;
 use Nette\InvalidArgumentException;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
@@ -79,18 +80,24 @@ class RoomControl extends Control
     /** @var Mail */
     private $officeMail;
 
+    /** @var ActiveRow */
+    private $booking;
+
     /** @var string */
-    private $cancelLink;
+    private $componentName;
 
     /**
      * RoomControl constructor.
-     * @param $name
+     * @param string $name
+     * @param string $componentName
      * @param IDatabaseLoader $databaseLoader
      * @param IBookingFormFactory $bookingFormFactory
+     * @param Mail $mail
      * @return void
      */
-    public function __construct($name, IDatabaseLoader $databaseLoader, IBookingFormFactory $bookingFormFactory, Mail $mail)
+    public function __construct($name, $componentName, IDatabaseLoader $databaseLoader, IBookingFormFactory $bookingFormFactory, Mail $mail)
     {
+        $this->componentName = $componentName;
         $this->databaseLoader = $databaseLoader;
         $this->bookingFormFactory = $bookingFormFactory;
         $this->customerMail = clone $mail;
@@ -251,11 +258,11 @@ class RoomControl extends Control
             $this->bookingFormDateTime = null;
 
             $this->customerMail->setParams($insertedBooking);
-            $this->customerMail->setCancelLink($this->cancelLink);
+            $this->customerMail->setComponentName($this->componentName);
             $this->customerMail->send();
 
             $this->officeMail->setParams($insertedBooking);
-            $this->officeMail->setCancelLink($this->cancelLink);
+            $this->officeMail->setComponentName($this->componentName);
             $this->officeMail->send();
 
             $this->redirect("this");
@@ -315,12 +322,20 @@ class RoomControl extends Control
     }
 
     /**
-     * @param string $cancelLink
+     * @param string $hash
+     * @param bool $value
+     * @throws \Nette\Application\AbortException
      * @return void
      */
-    public function setCancelLink($cancelLink)
+    public function handleConfirmCancel($hash, $value)
     {
-        $this->cancelLink = $cancelLink;
+        if ($value) {
+            $this->databaseLoader->getBookingTable()->where("hash", $hash)->delete();
+
+            $this->redirect("this", ["isCanceled" => true]);
+        } else {
+            $this->redirect("this");
+        }
     }
 
     /**
@@ -344,10 +359,6 @@ class RoomControl extends Control
             $this->interval = new \DateInterval("PT30M");
         }
 
-        if (!$this->cancelLink) {
-            throw new \Exception("You must set bookings cancel link");
-        }
-
         $dateTimePeriod = new \DatePeriod($this->startDateTime, $this->interval, $this->endDateTime);
         $this->bookings = $this->getBookings();
 
@@ -366,6 +377,8 @@ class RoomControl extends Control
         $this->template->weeksPeriod = new \DatePeriod(DateTime::from("now")->setISODate(date("Y"), date("W"), Day::MONDAY)->modify("-5 weeks"), new \DateInterval("P1W"), 20);
         $this->template->prevWeekDateTime = $this->template->weekPeriod->getStartDate()->modify("-1 week");
         $this->template->nextWeekDateTime = $this->template->weekPeriod->getStartDate()->modify("+1 week");
+        $this->template->booking = $this->databaseLoader->getBookingByHash($this->getParameter("hash"));
+        $this->template->isCanceled = $this->getParameter("isCanceled");
         $this->template->render();
     }
 }
@@ -373,5 +386,5 @@ class RoomControl extends Control
 interface IRoomControlFactory
 {
     /** @return RoomControl */
-    public function create($name);
+    public function create($name, $componentName);
 }

@@ -20,31 +20,21 @@ class Booking extends Object
     /** @var IRoomControlFactory */
     private $roomControlFactory;
 
-    /** @var ICancelControlFactory */
-    private $cancelControlFactory;
-
     /**
      * Booking constructor.
      * @param IRoomControlFactory $roomControlFactory
-     * @param ICancelControlFactory $cancelControlFactory
      */
-    public function __construct(IRoomControlFactory $roomControlFactory, ICancelControlFactory $cancelControlFactory)
+    public function __construct(IRoomControlFactory $roomControlFactory)
     {
         $this->roomControlFactory = $roomControlFactory;
-        $this->cancelControlFactory = $cancelControlFactory;
     }
 
     /**
      * @param string $name
      * @return RoomControl
      */
-    public function createRoom($name = null)
+    public function createRoom($name = null, $componentName)
     {
-        return $this->roomControlFactory->create($name);
-    }
-
-    public function createCancel()
-    {
-        return $this->cancelControlFactory->create();
+        return $this->roomControlFactory->create($name, $componentName);
     }
 }

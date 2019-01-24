@@ -64,4 +64,13 @@ class NetteDbLoader implements IDatabaseLoader
     {
         return $this->database->table("booking");
     }
+
+    /**
+     * @param string $hash
+     * @return bool|mixed|\Nette\Database\Table\IRow
+     */
+    public function getBookingByHash($hash)
+    {
+        return $this->getBookingTable()->where("hash", $hash)->fetch();
+    }
 }

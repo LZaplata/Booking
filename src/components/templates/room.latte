@@ -1,9 +1,27 @@
 <div class="room">
+    <div n:if="$isCanceled" class="alert alert-success mb-5">
+        Rezervace byla úspěšně zrušena.
+    </div>
+
+    <div n:if="$booking" class="mb-5">
+        <p class="h3 text-center">
+            Opravdu chcete zrušit rezervaci?
+        </p>
+        <p class="text-center">
+            <a href="{link ConfirmCancel! $booking->hash, true}" class="btn btn-primary">
+                Ano
+            </a>
+            <a href="{link ConfirmCancel! $booking->hash, false}" class="btn btn-outline-primary ml-2">
+                Ne
+            </a>
+        </p>
+    </div>
+
     <div class="booking-form mb-5" n:if="$isBookingFormVisible">
         {control bookingForm}
     </div>
 
-    <div class="weeks d-flex justify-content-between mb-4">
+    <div class="weeks d-flex justify-content-between mb-4" n:if="!$booking && !$isCanceled">
         <a href="{link this year => $prevWeekDateTime->format("Y"), week => $prevWeekDateTime->format("W")}" class="btn btn-outline-primary prev">
             << předchozí
         </a>
@@ -24,7 +42,7 @@
         </a>
     </div>
 
-    <div class="days d-flex border border-right-0 border-dark">
+    <div class="days d-flex border border-right-0 border-dark" n:if="!$booking && !$isCanceled">
         <div class="day flex-grow-1 border-right border-dark">
             <div class="header">
                 <div class="time font-weight-bold">

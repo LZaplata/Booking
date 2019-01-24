@@ -7,6 +7,7 @@ use http\Exception\BadMessageException;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Database\Table\ActiveRow;
+use Nette\Http\Request;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
@@ -27,22 +28,27 @@ class Mail extends Object
     /** @var ITemplateFactory */
     private $templateFactory;
 
+    /** @var Request */
+    private $httpRequest;
+
     /** @var ActiveRow */
     private $params;
 
     /** @var string */
-    private $cancelLink;
+    private $componentName;
 
     /**
      * Mail constructor.
      * @param IMailer $mailer
      * @param ITemplateFactory $templateFactory
+     * @param Request $httpRequest
      * @return void
      */
-    public function __construct(IMailer $mailer, ITemplateFactory $templateFactory)
+    public function __construct(IMailer $mailer, ITemplateFactory $templateFactory, Request $httpRequest)
     {
         $this->mailer = $mailer;
         $this->templateFactory = $templateFactory;
+        $this->httpRequest = $httpRequest;
     }
 
     /**
@@ -74,7 +80,7 @@ class Mail extends Object
         }
 
         $params = $this->params->toArray();
-        $params["cancelLink"] = $this->getCancelLink() . "?hash=" . $params["hash"];
+        $params["cancelLink"] = $this->getCancelLink() . "&" . $this->componentName . "-hash=" . $params["hash"];
 
         $this->template->setParameters($params);
 
@@ -92,17 +98,25 @@ class Mail extends Object
     /**
      * @return string
      */
-    public function getCancelLink()
+    private function getCancelLink()
     {
-        return $this->cancelLink;
+        return $this->httpRequest->getUrl()->getAbsoluteUrl();
     }
 
     /**
-     * @param string $cancelLink
+     * @param string $componentName
      */
-    public function setCancelLink($cancelLink)
+    public function setComponentName($componentName)
     {
-        $this->cancelLink = $cancelLink;
+        $this->componentName = $componentName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return $this->componentName;
     }
 
     /**

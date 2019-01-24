@@ -40,9 +40,5 @@ class BookingExtension extends CompilerExtension
 
         $builder->addDefinition($this->prefix("mail"))
             ->setFactory("LZaplata\Booking\Mail");
-
-        $builder->addDefinition($this->prefix("cancel"))
-            ->setFactory("LZaplata\Booking\Components\CancelControl")
-            ->setImplement("LZaplata\Booking\Components\ICancelControlFactory");
     }
 }
