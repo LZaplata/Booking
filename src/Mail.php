@@ -80,6 +80,7 @@ class Mail extends Object
         }
 
         $params = $this->params->toArray();
+        $params["date"] = DateTime::from($params["hour"] . ":" . $params["minute"])->setISODate($params["year"], $params["week"], $params["day_of_week"]);
         $params["cancelLink"] = $this->getCancelLink() . "&" . $this->componentName . "-hash=" . $params["hash"];
 
         $this->template->setParameters($params);
