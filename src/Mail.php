@@ -13,6 +13,7 @@ use Nette\Mail\Message;
 use Nette\Mail\SendException;
 use Nette\Object;
 use Nette\SmartObject;
+use Nette\Utils\DateTime;
 
 class Mail extends Object
 {
