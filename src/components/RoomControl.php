@@ -362,8 +362,6 @@ class RoomControl extends Control
         $dateTimePeriod = new \DatePeriod($this->startDateTime, $this->interval, $this->endDateTime);
         $this->bookings = $this->getBookings();
 
-        dump($this->bookings);
-
         $this->template->defaultTemplate = __DIR__ . "/templates/room.latte";
         $this->template->setFile($this->templateFile ?: $this->template->defaultTemplate);
         $this->template->name = $this->name;
