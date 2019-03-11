@@ -80,6 +80,9 @@ class RoomControl extends Control
     /** @var Mail */
     private $officeMail;
 
+    /** @var Mail */
+    private $bookingCancelMail;
+
     /** @var ActiveRow */
     private $booking;
 
@@ -111,6 +114,7 @@ class RoomControl extends Control
         $this->bookingFormFactory = $bookingFormFactory;
         $this->customerMail = clone $mail;
         $this->officeMail = clone $mail;
+        $this->bookingCancelMail = clone $mail;
 
         if (is_string($name)) {
             $this->setRoomName($name);
@@ -336,6 +340,17 @@ class RoomControl extends Control
     }
 
     /**
+     * @param Message $message
+     * @return Mail
+     */
+    public function setupBookingCancelMail(Message $message)
+    {
+        $this->bookingCancelMail->setMessage($message);
+
+        return $this->bookingCancelMail;
+    }
+
+    /**
      * @param string $hash
      * @param bool $value
      * @throws \Nette\Application\AbortException
@@ -344,7 +359,13 @@ class RoomControl extends Control
     public function handleConfirmCancel($hash, $value)
     {
         if ($value) {
-            $this->databaseLoader->getBookingTable()->where("hash", $hash)->delete();
+            $booking = $this->databaseLoader->getBookingTable()->where("hash", $hash)->fetch();
+
+            $this->bookingCancelMail->setParams($booking);
+            $this->bookingCancelMail->setComponentName($this->componentName);
+            $this->bookingCancelMail->send();
+
+            $booking->delete();
 
             $this->redirect("this", ["isCanceled" => true]);
         } else {

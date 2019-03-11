@@ -54,6 +54,7 @@ class BookingForm extends Control
 
         $form->addText("amount", "Počet míst")
             ->setType("number")
+            ->setHtmlAttribute("min", 1)
             ->setDefaultValue(1)
             ->addRule(Form::FILLED, "Vyplňte prosím počet míst")
             ->addRule(Form::NUMERIC, "Počet míst musí být číslo");
@@ -61,7 +62,8 @@ class BookingForm extends Control
         $form->addTextArea("text", "Poznámka");
 
         $form->addCheckbox("gdpr", Html::el("span")->addHtml("Souhlasím se ")->add(Html::el("a")->href($this->getGdprLink())->addText("zpracování osobních údajů pro potřeby rezervace.")))
-            ->setRequired("Musíte souhlasit se zpracování osobních údajů");
+            ->setRequired("Musíte souhlasit se zpracování osobních údajů")
+            ->setOmitted();
 
         $form->addSubmit("send", "Odeslat rezervaci");
 
