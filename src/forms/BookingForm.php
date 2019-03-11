@@ -54,6 +54,8 @@ class BookingForm extends Control
             ->addRule(Form::FILLED, "Vyplňte prosím počet míst")
             ->addRule(Form::NUMERIC, "Počet míst musí být číslo");
 
+        $form->addTextArea("text", "Poznámka");
+
         $form->addSubmit("send", "Odeslat rezervaci");
 
         $form->onValidate[] = [$this, "formValidate"];
