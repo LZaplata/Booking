@@ -92,6 +92,9 @@ class RoomControl extends Control
     /** @var array */
     private $weeksOptions = ["count" => 20, "history" => 5];
 
+    /** @var string */
+    private $gdprLink;
+
     /**
      * RoomControl constructor.
      * @param string $name
@@ -228,6 +231,7 @@ class RoomControl extends Control
     protected function createComponentBookingForm()
     {
         $control = $this->bookingFormFactory->create();
+        $control->setGdprLink($this->getGdprLink());
 
         $control->onFormValidate[] = function (BookingForm $control, Form $form, ArrayHash $values) {
             $this->handleShowBookingForm($this->bookingFormDateTime);
@@ -387,6 +391,23 @@ class RoomControl extends Control
     }
 
     /**
+     * @return string
+     */
+    public function getGdprLink()
+    {
+        return $this->gdprLink;
+    }
+
+    /**
+     * @param string $link
+     * @return void
+     */
+    public function setGdprLink($link)
+    {
+        $this->gdprLink = $link;
+    }
+
+    /**
      * @param string $template
      * @return void
      */
@@ -402,6 +423,7 @@ class RoomControl extends Control
     public function render()
     {
         Validators::assert($this->name, "string", "Room name");
+        Validators::assert($this->gdprLink, "string", "GDPR link");
 
         if (!$this->interval) {
             $this->interval = new \DateInterval("PT30M");

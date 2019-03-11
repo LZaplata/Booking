@@ -7,6 +7,7 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
+use Nette\Utils\Html;
 
 class BookingForm extends Control
 {
@@ -18,6 +19,9 @@ class BookingForm extends Control
 
     /** @var DateTime */
     private $dateTime;
+
+    /** @var string */
+    private $gdprLink;
 
     /**
      * @return Form
@@ -56,6 +60,9 @@ class BookingForm extends Control
 
         $form->addTextArea("text", "Poznámka");
 
+        $form->addCheckbox("gdpr", Html::el("span")->addHtml("Souhlasím se ")->add(Html::el("a")->href($this->getGdprLink())->addText("zpracování osobních údajů pro potřeby rezervace.")))
+            ->setRequired("Musíte souhlasit se zpracování osobních údajů");
+
         $form->addSubmit("send", "Odeslat rezervaci");
 
         $form->onValidate[] = [$this, "formValidate"];
@@ -82,6 +89,23 @@ class BookingForm extends Control
     public function formSucceeded($form, $values)
     {
         $this->onFormSucceeded($this, $values);
+    }
+
+    /**
+     * @return string
+     */
+    public function getGdprLink()
+    {
+        return $this->gdprLink;
+    }
+
+    /**
+     * @param string $link
+     * @return void
+     */
+    public function setGdprLink($link)
+    {
+        $this->gdprLink = $link;
     }
 
     /**
