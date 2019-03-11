@@ -136,6 +136,7 @@ class Mail extends Object
         }
 
         $this->message->setHtmlBody($this->getTemplate());
+        $this->message->setSubject($this->message->getSubject() . " (ID: " . $this->params->id . ")");
 
         $this->mailer->send($this->message);
     }
