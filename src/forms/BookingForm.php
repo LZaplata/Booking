@@ -90,6 +90,7 @@ class BookingForm extends Control
     public function render()
     {
         $this->template->setFile(__DIR__ . "/templates/bookingForm.latte");
+        $this->template->dateTime = DateTime::from($_GET["bohumirBookingRoom-dateTime"]);
         $this->template->render();
     }
 }
