@@ -89,6 +89,9 @@ class RoomControl extends Control
     /** @var string */
     private $capacityExceededMessage;
 
+    /** @var array */
+    private $weeksOptions = ["count" => 20, "history" => 5];
+
     /**
      * RoomControl constructor.
      * @param string $name
@@ -363,6 +366,27 @@ class RoomControl extends Control
     }
 
     /**
+     * @return array
+     */
+    public function getWeeksOptions()
+    {
+        return $this->weeksOptions;
+    }
+
+    /**
+     * @param int $count
+     * @param int $history
+     * @return void
+     */
+    public function setWeeksOptions($count = 20, $history = 5)
+    {
+        $this->weeksOptions = [
+            "count" => $count,
+            "history" => $history
+        ];
+    }
+
+    /**
      * @param string $template
      * @return void
      */
@@ -398,7 +422,7 @@ class RoomControl extends Control
         $this->template->disabledPeriods = $this->getDisabledPeriods();
         $this->template->actualDateTime = DateTime::from("+1 hour");
         $this->template->weekPeriod = new \DatePeriod(DateTime::from("now")->setISODate($this->year, $this->week, Day::MONDAY), new \DateInterval("P1W"), DateTime::from("now")->setISODate($this->year, $this->week, Day::SUNDAY));
-        $this->template->weeksPeriod = new \DatePeriod(DateTime::from("now")->setISODate(date("Y"), date("W"), Day::MONDAY)->modify("-5 weeks"), new \DateInterval("P1W"), 20);
+        $this->template->weeksPeriod = new \DatePeriod(DateTime::from("now")->setISODate(date("Y"), date("W"), Day::MONDAY)->modify("-" . $this->getWeeksOptions()["history"] . "weeks"), new \DateInterval("P1W"), $this->getWeeksOptions()["count"]);
         $this->template->prevWeekDateTime = $this->template->weekPeriod->getStartDate()->modify("-1 week");
         $this->template->nextWeekDateTime = $this->template->weekPeriod->getStartDate()->modify("+1 week");
         $this->template->booking = $this->databaseLoader->getBookingByHash($this->getParameter("hash"));
