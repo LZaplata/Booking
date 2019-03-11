@@ -86,6 +86,9 @@ class RoomControl extends Control
     /** @var string */
     private $componentName;
 
+    /** @var string */
+    private $capacityExceededMessage;
+
     /**
      * RoomControl constructor.
      * @param string $name
@@ -237,7 +240,11 @@ class RoomControl extends Control
             }
 
             if ($amount > $this->capacity) {
-                $form->addError("Na tento termín možné rezervovat uvedený počet míst");
+                if ($this->getCapacityExceededMessage()) {
+                    $form->addError($this->getCapacityExceededMessage());
+                } else {
+                    $form->addError("Na tento termín není možné rezervovat uvedený počet míst");
+                }
             }
         };
 
@@ -336,6 +343,23 @@ class RoomControl extends Control
         } else {
             $this->redirect("this");
         }
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function setCapacityExceededMessage($message)
+    {
+        $this->capacityExceededMessage = $message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCapacityExceededMessage()
+    {
+        return $this->capacityExceededMessage;
     }
 
     /**
