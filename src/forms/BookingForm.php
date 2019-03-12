@@ -52,6 +52,9 @@ class BookingForm extends Control
             ->setRequired("Vyplňte prosím mail")
             ->addRule(Form::EMAIL, "Nesprávný formát mailu");
 
+        $form->addText("phone", "Telefon")
+            ->setEmptyValue("+420");
+
         $form->addText("amount", "Počet míst")
             ->setType("number")
             ->setHtmlAttribute("min", 1)
