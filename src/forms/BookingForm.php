@@ -114,12 +114,29 @@ class BookingForm extends Control
     }
 
     /**
+     * @return DateTime
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
+    }
+
+    /**
+     * @param DateTime $dateTime
+     * @return void
+     */
+    public function setDateTime(DateTime $dateTime)
+    {
+        $this->dateTime = $dateTime;
+    }
+
+    /**
      * @return void
      */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/templates/bookingForm.latte");
-        $this->template->dateTime = DateTime::from($_GET["bohumirBookingRoom-dateTime"]);
+        $this->template->dateTime = $this->getDateTime();
         $this->template->render();
     }
 }

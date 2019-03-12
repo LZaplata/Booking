@@ -46,6 +46,7 @@ class NetteDbLoader implements IDatabaseLoader
                 city VARCHAR(255) NOT NULL,
                 zip VARCHAR(255) NOT NULL,
                 mail VARCHAR(255) NOT NULL,
+                phone VARCHAR(255) NOT NULL,
                 text text COLLATE utf8_czech_ci NOT NULL,
                 hash text COLLATE utf8_czech_ci NOT NULL, 
                 PRIMARY KEY (id),
