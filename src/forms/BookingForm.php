@@ -48,9 +48,9 @@ class BookingForm extends Control
         $form->addText("zip", "PSČ")
             ->setRequired("Vyplňte prosím poštovní směrovací číslo");
 
-        $form->addText("mail", "Mail")
-            ->setRequired("Vyplňte prosím mail")
-            ->addRule(Form::EMAIL, "Nesprávný formát mailu");
+        $form->addText("mail", "E-mail")
+            ->setRequired("Vyplňte prosím e-mail")
+            ->addRule(Form::EMAIL, "Nesprávný formát e-mailu");
 
         $form->addText("phone", "Telefon")
             ->setEmptyValue("+420");
