@@ -46,13 +46,17 @@ class BookingForm extends Control
                         "Vyplňte prosím ulici" :
                         false
                 );
+
+            $form->addText("street_no", "Č. p.")
+                ->setRequired("Vyplňte prosím číslo poštovné");
         }
 
-        $form->addText("street_no", "Č. p.")
-            ->setRequired("Vyplňte prosím číslo poštovné");
-
         $form->addText("city", "Město")
-            ->setRequired("Vyplňte prosím město");
+            ->setRequired(
+                !isset($this->getSettings()["street"]) || (isset($this->getSettings()["street"]) && $this->getSettings()["street"]["required"]) ?
+                    "Vyplňte prosím město" :
+                    false
+            );
 
         if (!isset($this->getSettings()["zip"]) || (isset($this->getSettings()["zip"]) && $this->getSettings()["zip"]["visible"])) {
             $form->addText("zip", "PSČ")
