@@ -97,6 +97,9 @@ class RoomControl extends Control
 
     /** @var string */
     private $gdprLink;
+    
+    /** @var array */
+    private $bookingFormSettings = [];
 
     /**
      * RoomControl constructor.
@@ -237,6 +240,7 @@ class RoomControl extends Control
         $control = $this->bookingFormFactory->create();
         $control->setGdprLink($this->getGdprLink());
         $control->setDateTime(DateTime::from($this->getParameter("dateTime")));
+        $control->setSettings($this->bookingFormSettings);
 
         $control->onFormValidate[] = function (BookingForm $control, Form $form, ArrayHash $values) {
             $this->handleShowBookingForm($this->bookingFormDateTime);
@@ -427,6 +431,30 @@ class RoomControl extends Control
     public function setGdprLink($link)
     {
         $this->gdprLink = $link;
+    }
+
+    /**
+     * @param bool $visible
+     * @param bool $required
+     */
+    public function setupBookingFormZipInput($visible = true, $required = true)
+    {
+        $this->bookingFormSettings["zip"] = [
+            "visible" => $visible,
+            "required" => $required
+        ];
+    }
+
+    /**
+     * @param bool $visible
+     * @param bool $required
+     */
+    public function setupBookingFormStreetInput($visible = true, $required = true)
+    {
+        $this->bookingFormSettings["street"] = [
+            "visible" => $visible,
+            "required" => $required
+        ];
     }
 
     /**

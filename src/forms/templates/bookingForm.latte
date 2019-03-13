@@ -19,7 +19,7 @@
             {input surname class => form-control}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row" n:if="!isset($settings['street']) || (isset($settings['street']) && $settings['street']['visible'])">
         <div class="form-group col-8">
             {label street /}
             {input street class => form-control}
@@ -34,7 +34,7 @@
             {label city /}
             {input city class => form-control}
         </div>
-        <div class="form-group col">
+        <div class="form-group col" n:if="!isset($settings['zip']) || (isset($settings['zip']) && $settings['zip']['visible'])">
             {label zip /}
             {input zip class => form-control}
         </div>

@@ -23,6 +23,9 @@ class BookingForm extends Control
     /** @var string */
     private $gdprLink;
 
+    /** @var array */
+    private $settings;
+
     /**
      * @return Form
      */
@@ -36,8 +39,14 @@ class BookingForm extends Control
         $form->addText("surname", "Příjmení")
             ->setRequired("Vyplňte prosím příjmení");
 
-        $form->addText("street", "Ulice")
-            ->setRequired("Vyplňte prosím ulici");
+        if (!isset($this->getSettings()["street"]) || (isset($this->getSettings()["street"]) && $this->getSettings()["street"]["visible"])) {
+            $form->addText("street", "Ulice")
+                ->setRequired(
+                    !isset($this->getSettings()["street"]) || (isset($this->getSettings()["street"]) && $this->getSettings()["street"]["required"]) ?
+                        "Vyplňte prosím ulici" :
+                        false
+                );
+        }
 
         $form->addText("street_no", "Č. p.")
             ->setRequired("Vyplňte prosím číslo poštovné");
@@ -45,8 +54,14 @@ class BookingForm extends Control
         $form->addText("city", "Město")
             ->setRequired("Vyplňte prosím město");
 
-        $form->addText("zip", "PSČ")
-            ->setRequired("Vyplňte prosím poštovní směrovací číslo");
+        if (!isset($this->getSettings()["zip"]) || (isset($this->getSettings()["zip"]) && $this->getSettings()["zip"]["visible"])) {
+            $form->addText("zip", "PSČ")
+                ->setRequired(
+                    !isset($this->getSettings()["zip"]) || (isset($this->getSettings()["zip"]) && $this->getSettings()["zip"]["required"]) ?
+                        "Vyplňte prosím poštovní směrovací číslo" :
+                        false
+                );
+        }
 
         $form->addText("mail", "E-mail")
             ->setRequired("Vyplňte prosím e-mail")
@@ -131,12 +146,30 @@ class BookingForm extends Control
     }
 
     /**
+     * @return array
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param array $settings
+     * @return void
+     */
+    public function setSettings(array $settings)
+    {
+        $this->settings = $settings;
+    }
+
+    /**
      * @return void
      */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/templates/bookingForm.latte");
         $this->template->dateTime = $this->getDateTime();
+        $this->template->settings = $this->getSettings();
         $this->template->render();
     }
 }
