@@ -239,7 +239,7 @@ class RoomControl extends Control
     {
         $control = $this->bookingFormFactory->create();
         $control->setGdprLink($this->getGdprLink());
-        $control->setDateTime(DateTime::from($this->getParameter("dateTime")));
+        $control->setDateTime(DateTime::from($this->getParameter("dateTime") ?: ($this->getParameter("bookingFormDateTime") ?: "")));
         $control->setSettings($this->bookingFormSettings);
 
         $control->onFormValidate[] = function (BookingForm $control, Form $form, ArrayHash $values) {
