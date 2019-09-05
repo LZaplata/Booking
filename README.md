@@ -1,5 +1,5 @@
-# ČSOB
-This is simple Nette Framework booking component.
+# Booking
+This is a simple Nette Framework booking component.
 
 ## Installation
 The easiest way to install library is via Composer.
@@ -15,14 +15,14 @@ or edit `composer.json` in your project
 }
 ````
 
-You have to register the library as extension in `config.neon` file.
+You have to register the library as an extension in `config.neon` file.
 
 ````neon
 extensions:
         booking: LZaplata\Booking\DI\BookingExtension
 ````
 
-Autowire library to presenter and autowire template factory
+Autowire a library to a presenter and autowire a template factory
 
 ````php
 use LZaplata\Booking\Booking;
@@ -36,7 +36,7 @@ public $templateFactory;
 ````
 
 ## Usage
-Create booking room as a component.
+Create a booking room as a component.
 
 ````php
 /**
