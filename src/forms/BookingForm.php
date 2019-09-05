@@ -86,9 +86,19 @@ class BookingForm extends Control
 
         $form->addTextArea("text", "Poznámka");
 
-        $form->addCheckbox("gdpr", Html::el("span")->addHtml("Souhlasím se ")->add(Html::el("a")->href($this->getGdprLink())->addText("zpracování osobních údajů pro potřeby rezervace.")->addAttributes(["target" => "_blank"])))
-            ->setRequired("Musíte souhlasit se zpracování osobních údajů")
-            ->setOmitted();
+//        $form->addCheckbox("gdpr", Html::el("span")->addHtml("Souhlasím se ")->add(Html::el("a")->href($this->getGdprLink())->addText("zpracování osobních údajů pro potřeby rezervace.")->addAttributes(["target" => "_blank"])))
+//            ->setRequired("Musíte souhlasit se zpracování osobních údajů")
+//            ->setOmitted();
+
+        if (isset($this->getSettings()["conditions"]) && $this->getSettings()["conditions"]["visible"]) {
+            $form->addCheckbox("conditions", $this->getSettings()["conditions"]["html"])
+                ->setRequired(
+                    !isset($this->getSettings()["conditions"]) || (isset($this->getSettings()["conditions"]) && $this->getSettings()["conditions"]["required"]) ?
+                        "Musíte souhlasit s podmínkami" :
+                        false
+                )
+                ->setOmitted();
+        }
 
         $form->addSubmit("send", "Odeslat rezervaci");
 

@@ -63,11 +63,11 @@ public function createComponentParkBookingRoom($name)
     $room->setDays([$monday, $tuesday, $wednesday, $thursday, $friday, $saturday, $sunday]); // sets days as array of objects
     $room->setCapacity(int $capacity); // sets capacity of each period
     $room->setInterval(new \DateInterval()); // sets booking interval
-    $room->setGdprLink(string $link); // sets link to GDPR informations page
     $room->setCapacityExceededMessage(string $message); // sets booking form error message if capacity is exceeded
     $room->addDisabledPeriod(new \DatePeriod()); // disable year period
     $room->setupBookingFormStreetInput(bool $visible, bool $required); // configure form street input
     $room->setupBookingFormZipInput(bool $visible, bool $required); // configure form ZIP input
+    $room->setupBookingFormConditionsInput(bool $visibility, bool $required, Nette\Utils\Html $html); // configure form conditions input
     $room->setWeeksOptions(int $count, int $history); // sets week selection options
     $room->setBookingFormText(string $text);
     

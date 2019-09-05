@@ -21,6 +21,7 @@ use Nette\Mail\SendException;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
+use Nette\Utils\Html;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 
@@ -462,6 +463,20 @@ class RoomControl extends Control
     }
 
     /**
+     * @param bool $visible
+     * @param bool $required
+     * @param Html $html
+     */
+    public function setupBookingFormConditionsInput($visible = true, $required = true, Html $html)
+    {
+        $this->bookingFormSettings["conditions"] = [
+            "visible" => $visible,
+            "required" => $required,
+            "html" => $html
+        ];
+    }
+
+    /**
      * @param string $bookingFormText
      */
     public function setBookingFormText($bookingFormText)
@@ -485,7 +500,7 @@ class RoomControl extends Control
     public function render()
     {
         Validators::assert($this->name, "string", "Room name");
-        Validators::assert($this->gdprLink, "string", "GDPR link");
+//        Validators::assert($this->gdprLink, "string", "GDPR link");
 
         if (!$this->interval) {
             $this->interval = new \DateInterval("PT30M");
