@@ -69,6 +69,7 @@ public function createComponentParkBookingRoom($name)
     $room->setupBookingFormStreetInput(bool $visible, bool $required); // configure form street input
     $room->setupBookingFormZipInput(bool $visible, bool $required); // configure form ZIP input
     $room->setWeeksOptions(int $count, int $history); // sets week selection options
+    $room->setBookingFormText(string $text);
     
     // setup confirmation emails for customer
     

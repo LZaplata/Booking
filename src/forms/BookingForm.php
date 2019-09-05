@@ -26,6 +26,9 @@ class BookingForm extends Control
     /** @var array */
     private $settings;
 
+    /** @var string */
+    private $text;
+
     /**
      * @return Form
      */
@@ -167,6 +170,14 @@ class BookingForm extends Control
     }
 
     /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    /**
      * @return void
      */
     public function render()
@@ -174,6 +185,7 @@ class BookingForm extends Control
         $this->template->setFile(__DIR__ . "/templates/bookingForm.latte");
         $this->template->dateTime = $this->getDateTime();
         $this->template->settings = $this->getSettings();
+        $this->template->text = $this->text;
         $this->template->render();
     }
 }
