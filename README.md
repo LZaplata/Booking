@@ -117,8 +117,8 @@ public function createComponentParkBookingRoom($name)
 In customer, office or booking cancel mail latte templates you can use those variables.
 
 ````latte
-{$id} // booking ID
-{$amount} // booked capacity
+{$id} {*booking ID*}
+{$amount} {*booked capacity*}
 {$name}
 {$surname}
 {$street}
@@ -128,6 +128,6 @@ In customer, office or booking cancel mail latte templates you can use those var
 {$mail}
 {$phone}
 {$text}
-{$date} // you can format it using {$date->format()} or {$date|date:""}
-{$cancelLink} // booking cancel link
+{$date} {*you can format it using {$date->format()} or {$date|date:""}*}
+{$cancelLink} {*booking cancel link*}
 ````
