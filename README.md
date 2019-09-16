@@ -69,7 +69,6 @@ public function createComponentParkBookingRoom($name)
     $room->setupBookingFormZipInput(bool $visible, bool $required); // configure form ZIP input
     $room->setupBookingFormConditionsInput(bool $visibility, bool $required, Nette\Utils\Html $html); // configure form conditions input
     $room->setWeeksOptions(int $count, int $history); // sets week selection options
-    $room->setBookingFormText(string $text);
     $room->setTemplate($file); // sets template for override some booking room blocks (example below)
     
     // setup confirmation emails for customer
@@ -151,5 +150,11 @@ You can override some booking room blocks
 
 {define period}
     {$bookingsCount}/{$capacity} {*formats capacity of individual period blocks*}
+{/define}
+
+{define formText} {*define booking form text*}
+    <p>
+        Some text...
+    </p>
 {/define}
 ````
