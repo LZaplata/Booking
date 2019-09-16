@@ -102,9 +102,6 @@ class RoomControl extends Control
     /** @var array */
     private $bookingFormSettings = [];
 
-    /** @var string */
-    private $bookingFormText;
-
     /**
      * RoomControl constructor.
      * @param string $name
@@ -245,7 +242,7 @@ class RoomControl extends Control
         $control->setGdprLink($this->getGdprLink());
         $control->setDateTime(DateTime::from($this->getParameter("dateTime") ?: ($this->getParameter("bookingFormDateTime") ?: "")));
         $control->setSettings($this->bookingFormSettings);
-        $control->setText($this->bookingFormText);
+        $control->setTemplate($this->templateFile);
 
         $control->onFormValidate[] = function (BookingForm $control, Form $form, ArrayHash $values) {
             $this->handleShowBookingForm($this->bookingFormDateTime);
@@ -474,14 +471,6 @@ class RoomControl extends Control
             "required" => $required,
             "html" => $html
         ];
-    }
-
-    /**
-     * @param string $bookingFormText
-     */
-    public function setBookingFormText($bookingFormText)
-    {
-        $this->bookingFormText = $bookingFormText;
     }
 
     /**
