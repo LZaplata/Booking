@@ -102,6 +102,9 @@ class RoomControl extends Control
     /** @var array */
     private $bookingFormSettings = [];
 
+    /** @var string */
+    private $delay;
+
     /**
      * RoomControl constructor.
      * @param string $name
@@ -474,6 +477,14 @@ class RoomControl extends Control
     }
 
     /**
+     * @param int $hours
+     */
+    public function setDelay($hours = 1)
+    {
+        $this->delay = "+" . $hours . "hours";
+    }
+
+    /**
      * @param string $template
      * @return void
      */
@@ -508,7 +519,7 @@ class RoomControl extends Control
         $this->template->week = $this->week;
         $this->template->isBookingFormVisible = $this->isBookingFormVisible;
         $this->template->disabledPeriods = $this->getDisabledPeriods();
-        $this->template->actualDateTime = DateTime::from("+1 hour");
+        $this->template->actualDateTime = DateTime::from($this->delay);
         $this->template->weekPeriod = new \DatePeriod(DateTime::from("now")->setISODate($this->year, $this->week, Day::MONDAY), new \DateInterval("P1W"), DateTime::from("now")->setISODate($this->year, $this->week, Day::SUNDAY));
         $this->template->weeksPeriod = new \DatePeriod(DateTime::from("now")->setISODate(date("Y"), date("W"), Day::MONDAY)->modify("-" . $this->getWeeksOptions()["history"] . "weeks"), new \DateInterval("P1W"), $this->getWeeksOptions()["count"]);
         $this->template->prevWeekDateTime = $this->template->weekPeriod->getStartDate()->modify("-1 week");
