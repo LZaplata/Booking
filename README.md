@@ -70,6 +70,7 @@ public function createComponentParkBookingRoom($name)
     $room->setupBookingFormConditionsInput(bool $visibility, bool $required, Nette\Utils\Html $html); // configure form conditions input
     $room->setWeeksOptions(int $count, int $history); // sets week selection options
     $room->setBookingFormText(string $text);
+    $room->setTemplate($file); // sets template for override some booking room blocks (example below)
     
     // setup confirmation emails for customer
     
@@ -131,4 +132,24 @@ In customer, office or booking cancel mail latte templates you can use those var
 {$text}
 {$date} {*you can format it using {$date->format()} or {$date|date:""}*}
 {$cancelLink} {*booking cancel link*}
+````
+
+### Booking room template
+
+You can override some booking room blocks
+
+````latte
+{extends $defaultTemplate} {*first of all you have to extend default template*}
+
+{define date}
+    {$dateTime->format("j. n. Y")} {*formats header date*}
+{/define}
+
+{define time}
+    {$dateTime->format("H:i")} {*formats header time*}
+{/define}
+
+{define period}
+    {$bookingsCount}/{$capacity} {*formats capacity of individual period blocks*}
+{/define}
 ````
