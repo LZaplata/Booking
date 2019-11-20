@@ -316,7 +316,15 @@ class RoomControl extends Control
             }
         }
 
+        $period = new \DatePeriod($period->getStartDate(), $period->getDateInterval(), $period->getEndDate()->setTime(23, 59));
+
         $this->disabledPeriods[] = $period;
+
+        for ($i = 1; $i < 5; $i++) {
+            $period = new \DatePeriod($period->getStartDate()->modify("+1 year"), $period->getDateInterval(), $period->getEndDate()->modify("+1 year"));
+
+            $this->disabledPeriods[] = $period;
+        }
     }
 
     /**
