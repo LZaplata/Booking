@@ -22,7 +22,10 @@
     </div>
 
     <div class="weeks d-flex justify-content-between mb-4" n:if="!$booking && !$isCanceled">
-        <a href="{link this year => $prevWeekDateTime->format("Y"), week => $prevWeekDateTime->format("W")}" class="btn btn-outline-primary prev">
+        {var $prevYear = $prevWeekDateTime->format("Y") < $year && $prevWeekDateTime->format("W") == 01 ? $year : $prevWeekDateTime->format("Y")}
+        {var $nextYear = $nextWeekDateTime->format("Y") == $year && $nextWeekDateTime->format("W") == 01 ? $year + 1 : $nextWeekDateTime->format("Y")}
+
+        <a href="{link this year => $prevYear, week => $prevWeekDateTime->format("W")}" class="btn btn-outline-primary prev">
             << předchozí
         </a>
 
@@ -30,14 +33,17 @@
             <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
                 {(int)$week}. týden ({$weekPeriod->getStartDate()->format("j. n. Y")} - {$weekPeriod->getEndDate()->format("j. n. Y")})
             </button>
-            <div class="dropdown-menu">
-                <a n:class="dropdown-item, $week == $period->format('W') ? font-weight-bold" href="{link this year => $period->format('Y'), week => $period->format('W')}" n:foreach="$weeksPeriod as $period">
+            <div class="dropdown-menu" n:inner-foreach="$weeksPeriod as $period">
+                {var $clonedPeriod = clone $period}
+                {var $periodYear = $clonedPeriod->format("Y") < $clonedPeriod->modify("+6 days")->format("Y") && $period->format("W") == 01 ? $clonedPeriod->format("Y") : $period->format("Y")}
+
+                <a n:class="dropdown-item, $week == $period->format('W') ? font-weight-bold" href="{link this year => $periodYear, week => $period->format('W')}">
                     {$period->format('W') == date("W") ? "tento" : (int)$period->format("W") . "."} týden ({$period->format("j. n. Y")} - {$period->modify("+6 days")->format("j. n. Y")})
                 </a>
             </div>
         </div>
 
-        <a href="{link this year => $nextWeekDateTime->format("Y"), week => $nextWeekDateTime->format("W")}" class="btn btn-outline-primary next">
+        <a href="{link this year => $nextYear, week => $nextWeekDateTime->format("W")}" class="btn btn-outline-primary next">
             následující >>
         </a>
     </div>
